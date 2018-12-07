@@ -1,16 +1,41 @@
-console.log("Hello Universe!");
-
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var radius = canvas.height / 2;
 ctx.translate(radius, radius);
 radius = radius * 0.9;
-setInterval(drawClock, 10);
+setInterval(drawClock, 10)
+
+var anim = 0;
+var grd = 0;
+var animPos = false;
 
 function drawClock() {
+    animateFace();
     drawFace(ctx, radius);
     drawNumbers(ctx, radius);
     drawTime(ctx, radius);
+}
+
+function animateFace(){
+  
+  if (animPos == false){
+    anim = anim + 1;
+  } else {
+    anim = anim - 1;
+  }
+  
+  if (anim > 200){
+    animPos = true;
+  } 
+  if (anim < 20){
+    animPos = false;
+  }
+  
+  grd = ctx.createLinearGradient(0, anim, 0, 0);
+  grd.addColorStop(0,"blue");
+  grd.addColorStop(0.2,"lightblue");
+  grd.addColorStop(0.5,"red");
+  grd.addColorStop(1,"yellow");
 }
 
 function drawFace(ctx, radius) {
@@ -18,7 +43,7 @@ function drawFace(ctx, radius) {
 
     ctx.beginPath();
     ctx.arc(0, 0, radius, 0, 2*Math.PI);
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = grd;
     ctx.fill();
 
     grad = ctx.createRadialGradient(0,0,radius*0.95, 0,0,radius*1.05);
